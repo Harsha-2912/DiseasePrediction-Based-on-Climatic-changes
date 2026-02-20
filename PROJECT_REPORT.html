@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Disease Predictor — Project Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #ec4899;
+            --bg: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --light-bg: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 11pt;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            .no-break {
+                page-break-inside: avoid;
+            }
+
+            .cover-page {
+                height: 100vh;
+            }
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent);
+            top: 5%;
+            right: -10%;
+        }
+
+        .cover-page::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.1), transparent);
+            bottom: 10%;
+            left: -5%;
+        }
+
+        .cover-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .cover-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #818cf8, #06b6d4, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cover-subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-bottom: 3rem;
+        }
+
+        .cover-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .cover-info span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cover-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 999px;
+            margin: 1.5rem auto;
+        }
+
+        /* ===== CONTENT PAGES ===== */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 2.5rem;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #6366f1, #ec4899) 1;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #6366f1;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 0.75rem;
+            color: #334155;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        thead th {
+            background: #f1f5f9;
+            padding: 0.65rem 0.75rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 0.55rem 0.75rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background: #fafbfc;
+        }
+
+        /* Feature cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feature-card {
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--light-bg);
+        }
+
+        .feature-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .feature-card p {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .badge.green {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .badge.blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge.pink {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .badge.amber {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        /* Architecture block */
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .arch-arrow {
+            color: #94a3b8;
+            font-size: 1.5rem;
+        }
+
+        /* Code block */
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #f1f5f9;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #6366f1;
+        }
+
+        /* List */
+        ul {
+            margin: 0.5rem 0 0.75rem 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.3rem;
+            color: #334155;
+        }
+
+        /* TOC */
+        .toc {
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1rem 0 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .toc h3 {
+            margin-top: 0;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+            padding: 0;
+        }
+
+        .toc li {
+            counter-increment: toc-counter;
+            padding: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+
+        .toc li::before {
+            content: counter(toc-counter) ".";
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, #ede9fe, #e0f2fe);
+            border-left: 4px solid #6366f1;
+            padding: 1rem 1.25rem;
+            border-radius: 0 10px 10px 0;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 2rem 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================================ COVER PAGE ================================ -->
+    <div class="cover-page">
+        <div class="cover-logo">🏥</div>
+        <div class="cover-badge">📄 Project Report & Technical Documentation</div>
+        <h1 class="cover-title">ClimateHealth<br>Intelligence Platform</h1>
+        <p class="cover-subtitle">AI-Powered Climate-Disease Prediction System</p>
+        <div class="cover-divider"></div>
+        <div class="cover-info">
+            <span>📌 <strong>Project:</strong>&nbsp; Climate Disease Predictor</span>
+            <span>🛠️ <strong>Type:</strong>&nbsp; Full-Stack AI/ML Web Application</span>
+            <span>📅 <strong>Date:</strong>&nbsp; February 2026</span>
+            <span>💻 <strong>Stack:</strong>&nbsp; React + Node.js + Python ML + MySQL</span>
+        </div>
+    </div>
+
+    <!-- ================================ TABLE OF CONTENTS ================================ -->
+    <div class="content page-break">
+        <h1>Table of Contents</h1>
+        <div class="toc">
+            <ol>
+                <li>Project Overview</li>
+                <li>System Architecture</li>
+                <li>Tech Stack — Complete Breakdown</li>
+                <li>Machine Learning Models</li>
+                <li>Prediction Pipeline — Hybrid AI Engine</li>
+                <li>External API Integrations</li>
+                <li>Database Design</li>
+                <li>Frontend Components</li>
+                <li>Unique Features — What Makes This Project Stand Out</li>
+                <li>Security Implementation</li>
+                <li>Conclusion</li>
+            </ol>
+        </div>
+
+        <!-- ================================ 1. OVERVIEW ================================ -->
+        <h1>1. Project Overview</h1>
+        <p>
+            The <strong>ClimateHealth Intelligence Platform</strong> (Climate Disease Predictor) is a full-stack
+            AI/ML-powered web application that predicts potential disease outbreaks based on real-time climate and
+            environmental data. It combines <strong>machine learning models</strong>, <strong>rule-based expert
+                systems</strong>, and <strong>external weather/health APIs</strong> to provide accurate, explainable
+            predictions with actionable health precautions.
+        </p>
+        <div class="highlight-box">
+            <strong>🎯 Core Goal:</strong> Bridge the gap between climate science and public health by enabling users to
+            input environmental parameters (Temperature, Humidity, Rainfall, AQI) and receive AI-powered disease risk
+            assessments with full transparency into how the prediction was made.
+        </div>
+        <p>The system predicts <strong>8 disease categories</strong>:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Disease</th>
+                    <th>Primary Climate Trigger</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>🦟 Malaria</td>
+                    <td>High temp + High humidity + Rain</td>
+                    <td>Vector-borne</td>
+                </tr>
+                <tr>
+                    <td>🦠 Dengue</td>
+                    <td>Moderate-high temp + Humid breeding conditions</td>
+                    <td>Vector-borne</td>
+                </tr>
+                <tr>
+                    <td>🤒 Typhoid</td>
+                    <td>Heavy rainfall + Contaminated water</td>
+                    <td>Water-borne</td>
+                </tr>
+                <tr>
+                    <td>💨 Asthma</td>
+                    <td>Poor air quality (AQI &gt; 150)</td>
+                    <td>Respiratory</td>
+                </tr>
+                <tr>
+                    <td>🤧 Viral Fever</td>
+                    <td>Extreme temperature fluctuations</td>
+                    <td>Infectious</td>
+                </tr>
+                <tr>
+                    <td>🚰 Cholera</td>
+                    <td>Very heavy rain + Warm temperatures</td>
+                    <td>Water-borne</td>
+                </tr>
+                <tr>
+                    <td>🌡️ Heat Stroke</td>
+                    <td>Extreme heat (&gt;38°C) + Low humidity</td>
+                    <td>Environmental</td>
+                </tr>
+                <tr>
+                    <td>✅ No Disease</td>
+                    <td>Normal/safe environmental conditions</td>
+                    <td>Baseline</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 2. ARCHITECTURE ================================ -->
+        <h1 class="page-break">2. System Architecture</h1>
+        <p>The project follows a <strong>3-tier architecture</strong> with a dedicated ML layer:</p>
+        <div class="arch-flow">
+            <div class="arch-box" style="background: #dbeafe; color: #1d4ed8;">🖥️ Frontend<br><small>React +
+                    Vite</small></div>
+            <span class="arch-arrow">→</span>
+            <div class="arch-box" style="background: #d1fae5; color: #047857;">⚙️ Backend<br><small>Express.js</small>
+            </div>
+            <span class="arch-arrow">→</span>
+            <div class="arch-box" style="background: #ede9fe; color: #6d28d9;">🧠 ML
+                Engine<br><small>Python/scikit-learn</small></div>
+            <span class="arch-arrow">→</span>
+            <div class="arch-box" style="background: #fef3c7; color: #b45309;">🗄️ Database<br><small>MySQL</small>
+            </div>
+        </div>
+        <div class="arch-flow">
+            <div class="arch-box" style="background: #fce7f3; color: #be185d;">🌐 External APIs<br><small>Weather / AQI
+                    / WHO</small></div>
+        </div>
+
+        <h3>Data Flow:</h3>
+        <ol style="margin-left: 1.5rem;">
+            <li>User inputs climate data (or auto-fills from GPS + weather API)</li>
+            <li>Backend validates input and fetches regional risk level from external APIs</li>
+            <li>Backend spawns Python process to run hybrid ML prediction</li>
+            <li>Python ensemble (RF + SVM + LR) produces probabilities, fused with expert rules</li>
+            <li>Explainable AI engine generates feature importances, reasoning, and waterfall data</li>
+            <li>Result saved to MySQL and returned to frontend for rich visualization</li>
+        </ol>
+
+        <!-- ================================ 3. TECH STACK ================================ -->
+        <h1 class="page-break">3. Tech Stack — Complete Breakdown</h1>
+
+        <h2>3.1 Frontend</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Version</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>React</strong></td>
+                    <td>19.2.0</td>
+                    <td>Core UI framework (latest with concurrent features)</td>
+                </tr>
+                <tr>
+                    <td><strong>Vite</strong></td>
+                    <td>7.3.1</td>
+                    <td>Build tool — ultra-fast HMR and bundling</td>
+                </tr>
+                <tr>
+                    <td><strong>React Router DOM</strong></td>
+                    <td>7.13.0</td>
+                    <td>Client-side routing (Login, Dashboard, History, Admin)</td>
+                </tr>
+                <tr>
+                    <td><strong>Framer Motion</strong></td>
+                    <td>12.34.0</td>
+                    <td>Animations — page transitions, micro-interactions</td>
+                </tr>
+                <tr>
+                    <td><strong>Recharts</strong></td>
+                    <td>3.7.0</td>
+                    <td>Charts — Bar, Pie, Radar, Gauge, Line charts</td>
+                </tr>
+                <tr>
+                    <td><strong>React Leaflet</strong></td>
+                    <td>5.0.0</td>
+                    <td>Interactive disease intelligence maps</td>
+                </tr>
+                <tr>
+                    <td><strong>Leaflet</strong></td>
+                    <td>1.9.4</td>
+                    <td>OpenStreetMap rendering engine</td>
+                </tr>
+                <tr>
+                    <td><strong>react-i18next</strong></td>
+                    <td>16.5.4</td>
+                    <td>Internationalization (multi-language support)</td>
+                </tr>
+                <tr>
+                    <td><strong>i18next</strong></td>
+                    <td>25.8.9</td>
+                    <td>i18n framework core</td>
+                </tr>
+                <tr>
+                    <td><strong>React Toastify</strong></td>
+                    <td>11.0.5</td>
+                    <td>Toast notifications for feedback</td>
+                </tr>
+                <tr>
+                    <td><strong>React Icons</strong></td>
+                    <td>5.5.0</td>
+                    <td>Icon library (FontAwesome, etc.)</td>
+                </tr>
+                <tr>
+                    <td><strong>jsPDF</strong></td>
+                    <td>4.1.0</td>
+                    <td>Client-side PDF report generation</td>
+                </tr>
+                <tr>
+                    <td><strong>jspdf-autotable</strong></td>
+                    <td>5.0.7</td>
+                    <td>Table formatting for PDF reports</td>
+                </tr>
+                <tr>
+                    <td><strong>Axios</strong></td>
+                    <td>1.13.5</td>
+                    <td>HTTP client for API communication</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3.2 Backend</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Version</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Node.js</strong></td>
+                    <td>Latest</td>
+                    <td>Runtime environment</td>
+                </tr>
+                <tr>
+                    <td><strong>Express.js</strong></td>
+                    <td>4.22.1</td>
+                    <td>REST API framework</td>
+                </tr>
+                <tr>
+                    <td><strong>MySQL2</strong></td>
+                    <td>3.17.1</td>
+                    <td>Database driver (promise-based)</td>
+                </tr>
+                <tr>
+                    <td><strong>JWT (jsonwebtoken)</strong></td>
+                    <td>9.0.2</td>
+                    <td>Token-based authentication</td>
+                </tr>
+                <tr>
+                    <td><strong>bcrypt / bcryptjs</strong></td>
+                    <td>6.0 / 2.4.3</td>
+                    <td>Password hashing (dual support)</td>
+                </tr>
+                <tr>
+                    <td><strong>Multer</strong></td>
+                    <td>1.4.5</td>
+                    <td>File upload handling (CSV datasets)</td>
+                </tr>
+                <tr>
+                    <td><strong>CORS</strong></td>
+                    <td>2.8.5</td>
+                    <td>Cross-origin request handling</td>
+                </tr>
+                <tr>
+                    <td><strong>dotenv</strong></td>
+                    <td>16.6.1</td>
+                    <td>Environment variable management</td>
+                </tr>
+                <tr>
+                    <td><strong>Nodemailer</strong></td>
+                    <td>8.0.1</td>
+                    <td>Email alert service</td>
+                </tr>
+                <tr>
+                    <td><strong>Axios</strong></td>
+                    <td>1.13.5</td>
+                    <td>External API requests (weather, AQI)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3.3 Machine Learning</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Python</strong></td>
+                    <td>ML scripting and model inference</td>
+                </tr>
+                <tr>
+                    <td><strong>scikit-learn</strong></td>
+                    <td>ML model training and evaluation</td>
+                </tr>
+                <tr>
+                    <td><strong>NumPy</strong></td>
+                    <td>Numerical computations and array operations</td>
+                </tr>
+                <tr>
+                    <td><strong>Pandas</strong></td>
+                    <td>Data processing and CSV handling</td>
+                </tr>
+                <tr>
+                    <td><strong>Joblib</strong></td>
+                    <td>Model serialization (.pkl files)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3.4 Database</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MySQL</strong></td>
+                    <td>Relational database for users, predictions, precautions</td>
+                </tr>
+                <tr>
+                    <td><strong>3 Tables</strong></td>
+                    <td><code>users</code>, <code>predictions</code>, <code>precautions</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 4. ML MODELS ================================ -->
+        <h1 class="page-break">4. Machine Learning Models</h1>
+        <p>The system trains and uses <strong>3 distinct ML models</strong> in an ensemble architecture:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Algorithm</th>
+                    <th>Config</th>
+                    <th>Saved File</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Random Forest</strong></td>
+                    <td>Ensemble of decision trees</td>
+                    <td>200 trees, max_depth=15, min_samples_split=5</td>
+                    <td><code>RandomForest_model.pkl</code></td>
+                    <td>~37.6 MB</td>
+                </tr>
+                <tr>
+                    <td><strong>Support Vector Machine</strong></td>
+                    <td>SVM with RBF kernel</td>
+                    <td>C=10.0, gamma='scale', probability=True</td>
+                    <td><code>SVM_model.pkl</code></td>
+                    <td>~533 KB</td>
+                </tr>
+                <tr>
+                    <td><strong>Logistic Regression</strong></td>
+                    <td>Multinomial Logistic Regression</td>
+                    <td>max_iter=2000, C=1.0</td>
+                    <td><code>LogisticRegression_model.pkl</code></td>
+                    <td>~2.1 KB</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Training Process (<code>train_model.py</code>):</h3>
+        <ul>
+            <li><strong>Dataset:</strong> 5,000 synthetically generated samples using domain-expert probability
+                distributions</li>
+            <li><strong>Features:</strong> 4 inputs — Temperature (°C), Humidity (%), Rainfall (mm), AQI (index)</li>
+            <li><strong>Target:</strong> 8 disease classes</li>
+            <li><strong>Split:</strong> 80% train / 20% test with stratified sampling</li>
+            <li><strong>Validation:</strong> 5-fold cross-validation for each model</li>
+            <li><strong>Best model</strong> is automatically selected and saved as <code>model.pkl</code></li>
+        </ul>
+
+        <!-- ================================ 5. PIPELINE ================================ -->
+        <h1 class="page-break">5. Prediction Pipeline — Hybrid AI Engine</h1>
+        <p>The prediction system is NOT a simple classifier. It uses a <strong>sophisticated 3-stage hybrid
+                pipeline</strong>:</p>
+
+        <h2>Stage 1: Ensemble Model Voting</h2>
+        <p>All 3 ML models (RF, SVM, LR) are loaded. Each produces probability distributions across 8 diseases. These
+            probabilities are accumulated and averaged.</p>
+
+        <h2>Stage 2: Expert Rule Engine</h2>
+        <p>A comprehensive rule-based system encodes medical domain knowledge:</p>
+        <ul>
+            <li><strong>Malaria rules:</strong> Temp &gt;25°C + Humidity &gt;60% + Rainfall &gt;100mm</li>
+            <li><strong>Dengue rules:</strong> 25–35°C + Humidity &gt;60% + Standing water conditions</li>
+            <li><strong>Asthma rules:</strong> AQI &gt;100, with escalating thresholds at 150, 200, 300</li>
+            <li><strong>Heat Stroke rules:</strong> Temp &gt;38°C, especially with low humidity</li>
+            <li><strong>Regional Risk Boost:</strong> High-risk locations get boosted vector-disease scores</li>
+        </ul>
+
+        <h2>Stage 3: Fusion & Decision</h2>
+        <div class="highlight-box">
+            <strong>Final Score = (ML Probability × 0.6) + (Rule Score × 0.4)</strong><br>
+            This weighted fusion ensures the system benefits from data-driven ML while respecting established medical
+            knowledge.
+        </div>
+
+        <h2>Stage 4: Explainable AI Engine</h2>
+        <p>After prediction, the system generates transparency data:</p>
+        <ul>
+            <li><strong>RF Feature Importances:</strong> Extracted from <code>model.feature_importances_</code></li>
+            <li><strong>Rule Contributions:</strong> Measures how current values triggered expert rules</li>
+            <li><strong>Combined Importance:</strong> 50/50 fusion of ML + rules, normalized to 100%</li>
+            <li><strong>Natural Language Reasoning:</strong> Human-readable sentences explaining each factor</li>
+            <li><strong>SHAP-style Waterfall:</strong> Step-by-step risk buildup from 12.5% base to final score</li>
+        </ul>
+
+        <!-- ================================ 6. APIS ================================ -->
+        <h1 class="page-break">6. External API Integrations</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>API</th>
+                    <th>Purpose</th>
+                    <th>Data Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Open-Meteo</strong></td>
+                    <td>Weather forecasts</td>
+                    <td>7-day temp, humidity, rainfall predictions</td>
+                </tr>
+                <tr>
+                    <td><strong>OpenWeatherMap</strong></td>
+                    <td>Real-time weather</td>
+                    <td>Current temperature, humidity, conditions</td>
+                </tr>
+                <tr>
+                    <td><strong>WAQI (World AQI)</strong></td>
+                    <td>Air quality monitoring</td>
+                    <td>Real-time AQI values by geolocation</td>
+                </tr>
+                <tr>
+                    <td><strong>WHO / IDSP</strong></td>
+                    <td>Health intelligence</td>
+                    <td>Regional disease alerts and risk levels</td>
+                </tr>
+                <tr>
+                    <td><strong>Browser Geolocation</strong></td>
+                    <td>Location detection</td>
+                    <td>Latitude, Longitude for auto-fill</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 7. DATABASE ================================ -->
+        <h1>7. Database Design</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Table</th>
+                    <th>Fields</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>users</strong></td>
+                    <td>id, username, password (hashed), role, created_at</td>
+                    <td>User authentication with role-based access</td>
+                </tr>
+                <tr>
+                    <td><strong>predictions</strong></td>
+                    <td>id, user_id (FK), temperature, humidity, rainfall, aqi, location, predicted_disease, accuracy,
+                        created_at</td>
+                    <td>Full prediction history per user</td>
+                </tr>
+                <tr>
+                    <td><strong>precautions</strong></td>
+                    <td>id, disease_name, description, precautions (JSON), created_at</td>
+                    <td>Disease-specific precaution data</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 8. COMPONENTS ================================ -->
+        <h1 class="page-break">8. Frontend Components</h1>
+        <p>The application consists of <strong>15 specialized React components</strong> and <strong>5 pages</strong>:
+        </p>
+
+        <h2>Pages</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Page</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Login</strong></td>
+                    <td>Premium split-screen authentication with brand features panel</td>
+                </tr>
+                <tr>
+                    <td><strong>Register</strong></td>
+                    <td>Account creation with platform statistics and cyan/emerald theme</td>
+                </tr>
+                <tr>
+                    <td><strong>Dashboard</strong></td>
+                    <td>Main prediction interface with intelligence widget, forms, and results</td>
+                </tr>
+                <tr>
+                    <td><strong>History</strong></td>
+                    <td>Past prediction records with disease-colored accents</td>
+                </tr>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>Dataset upload with drag-and-drop and model retraining</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Components</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ExplainableAIPanel</strong></td>
+                    <td>3-tab XAI panel — Feature Importance, AI Reasoning, Risk Waterfall</td>
+                </tr>
+                <tr>
+                    <td><strong>DiseaseIntelligenceMap</strong></td>
+                    <td>Interactive Leaflet map with disease risk zones and heatmap</td>
+                </tr>
+                <tr>
+                    <td><strong>OutbreakDetectionPanel</strong></td>
+                    <td>Early warning system using threshold-based outbreak detection</td>
+                </tr>
+                <tr>
+                    <td><strong>ModelComparison</strong></td>
+                    <td>Side-by-side comparison of RF, SVM, LR model predictions</td>
+                </tr>
+                <tr>
+                    <td><strong>ForecastChart</strong></td>
+                    <td>7-day disease risk forecast timeline (line chart)</td>
+                </tr>
+                <tr>
+                    <td><strong>DiseaseRadarChart</strong></td>
+                    <td>Radar chart showing relative risk across all 8 diseases</td>
+                </tr>
+                <tr>
+                    <td><strong>DiseaseBarChart</strong></td>
+                    <td>Horizontal bar chart of disease probability distribution</td>
+                </tr>
+                <tr>
+                    <td><strong>DiseasePieChart</strong></td>
+                    <td>Pie chart visualization of disease risk proportions</td>
+                </tr>
+                <tr>
+                    <td><strong>SeverityGauge</strong></td>
+                    <td>Radial gauge displaying severity level (Low to Critical)</td>
+                </tr>
+                <tr>
+                    <td><strong>Background3D</strong></td>
+                    <td>Animated canvas with 60 particles, 4 floating orbs, neural connections</td>
+                </tr>
+                <tr>
+                    <td><strong>AlertBanner</strong></td>
+                    <td>Real-time health alert notifications</td>
+                </tr>
+                <tr>
+                    <td><strong>Chatbot</strong></td>
+                    <td>AI-powered health assistant for disease-related queries</td>
+                </tr>
+                <tr>
+                    <td><strong>Navbar</strong></td>
+                    <td>Responsive navigation with gradient branding and pill-shaped links</td>
+                </tr>
+                <tr>
+                    <td><strong>RiskMap</strong></td>
+                    <td>Geospatial risk visualization overlay</td>
+                </tr>
+                <tr>
+                    <td><strong>ErrorBoundary</strong></td>
+                    <td>Graceful error handling to prevent component crashes</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 9. UNIQUE FEATURES ================================ -->
+        <h1 class="page-break">9. Unique Features — What Makes This Project Stand Out</h1>
+        <p>This is not a basic prediction app. Here are the <strong>distinctive features</strong> that set this project
+            apart:</p>
+
+        <div class="feature-grid">
+            <div class="feature-card no-break">
+                <h4>🧠 Explainable AI (XAI)</h4>
+                <p>Unlike black-box models, this system explains <em>why</em> each prediction was made — showing feature
+                    importances, natural language reasoning, ML vs Expert rule comparison, and SHAP-style waterfall
+                    charts. This builds trust and makes the AI transparent.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🔬 Hybrid AI Engine</h4>
+                <p>Combines ML ensemble (3 models) with a domain-expert rule system using 60/40 weighted fusion. This
+                    prevents pure ML overfitting and ensures medically sound predictions even with unusual inputs.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🤖 Multi-Model Ensemble</h4>
+                <p>Runs Random Forest, SVM, and Logistic Regression simultaneously and averages their probability
+                    outputs. Users can compare individual model predictions in real-time via the Model Comparison panel.
+                </p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>📡 Real-Time Data Integration</h4>
+                <p>Auto-fills climate parameters from real weather APIs (Open-Meteo, OpenWeatherMap, WAQI) using GPS
+                    geolocation — no manual data entry required.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🗺️ Disease Intelligence Map</h4>
+                <p>Interactive Leaflet map with disease risk overlays, heatmap visualization, and geospatial analysis —
+                    showing where disease risks are concentrated geographically.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🚨 Outbreak Detection System</h4>
+                <p>Real-time outbreak alert engine using threshold-based detection algorithms on current and forecasted
+                    data to identify potential disease outbreaks before they happen.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>📈 7-Day Disease Forecast</h4>
+                <p>Fetches weather forecast data and runs batch predictions for the next 7 days, showing disease risk
+                    trends over time in interactive line charts.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🩺 Medical Precaution Engine</h4>
+                <p>Provides 6 detailed, clinically-relevant precautions for each predicted disease — beyond generic
+                    advice, offering actionable medical guidance.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>📊 6 Interactive Chart Types</h4>
+                <p>Bar, Pie, Radar, Line (Forecast), Gauge (Severity), and Waterfall charts provide multi-dimensional
+                    visual analysis of disease risks.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>💬 AI Health Chatbot</h4>
+                <p>Built-in conversational AI assistant for disease-related queries, providing on-demand health guidance
+                    directly within the application.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>📄 PDF Report Generation</h4>
+                <p>Client-side PDF generation using jsPDF with auto-tables, allowing users to download professional
+                    disease analysis reports for offline reference.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🌐 Multi-Language Support</h4>
+                <p>Full internationalization (i18n) with react-i18next, making the platform accessible to diverse user
+                    populations across regions.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>⚡ Severity Classification</h4>
+                <p>4-level severity system (Low → Moderate → High → Critical) with visual indicators including
+                    color-coded badges and gradient backgrounds.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>📤 Admin Model Retraining</h4>
+                <p>Admin panel with drag-and-drop CSV upload that triggers model retraining — keeping the ML models
+                    fresh with new data patterns.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🎨 Premium UI Design</h4>
+                <p>Glassmorphism, animated canvas background, gradient typography, micro-animations — a
+                    professional-grade design system that rivals production applications.</p>
+            </div>
+            <div class="feature-card no-break">
+                <h4>🔐 JWT Authentication</h4>
+                <p>Secure token-based auth with bcrypt password hashing, role-based access control (User/Admin), and
+                    protected API routes.</p>
+            </div>
+        </div>
+
+        <!-- ================================ 10. SECURITY ================================ -->
+        <h1 class="page-break">10. Security Implementation</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Security Feature</th>
+                    <th>Implementation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Password Storage</strong></td>
+                    <td>bcrypt hashing with salt rounds (never stored in plaintext)</td>
+                </tr>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td>JWT tokens with expiration, stored in localStorage</td>
+                </tr>
+                <tr>
+                    <td><strong>Route Protection</strong></td>
+                    <td>Backend middleware validates JWT before accessing protected endpoints</td>
+                </tr>
+                <tr>
+                    <td><strong>Role-Based Access</strong></td>
+                    <td>User and Admin roles with separate permissions</td>
+                </tr>
+                <tr>
+                    <td><strong>CORS Configuration</strong></td>
+                    <td>Controlled cross-origin access between frontend and backend</td>
+                </tr>
+                <tr>
+                    <td><strong>Input Validation</strong></td>
+                    <td>Server-side validation of all environmental parameters</td>
+                </tr>
+                <tr>
+                    <td><strong>API Key Management</strong></td>
+                    <td>Environment variables (.env) for sensitive API keys</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ================================ 11. CONCLUSION ================================ -->
+        <h1>11. Conclusion</h1>
+        <p>
+            The <strong>ClimateHealth Intelligence Platform</strong> is a comprehensive full-stack application that
+            demonstrates the practical intersection of <strong>Machine Learning</strong>, <strong>Climate
+                Science</strong>, and <strong>Public Health</strong>. By employing a hybrid AI engine (ensemble ML +
+            expert rules), real-time data integration from weather and health APIs, and a fully transparent Explainable
+            AI panel, the system goes far beyond a simple prediction tool.
+        </p>
+        <p>
+            The platform's unique combination of <strong>16 distinctive features</strong> — including outbreak
+            detection, 7-day disease forecasting, interactive disease intelligence maps, multi-model comparison,
+            SHAP-style reasoning, and PDF report generation — positions it as a production-ready health intelligence
+            system that could serve public health officials, medical professionals, and general users alike.
+        </p>
+
+        <div class="highlight-box">
+            <strong>Technical Highlights:</strong><br>
+            &nbsp;&nbsp;• 3 ML Models in Ensemble &nbsp;&nbsp;• 15+ React Components &nbsp;&nbsp;• 4 External APIs<br>
+            &nbsp;&nbsp;• 8 Disease Categories &nbsp;&nbsp;• 6 Chart Visualizations &nbsp;&nbsp;• Full XAI
+            Transparency<br>
+            &nbsp;&nbsp;• JWT Auth + RBAC &nbsp;&nbsp;• MySQL Persistence &nbsp;&nbsp;• i18n Multi-language
+        </div>
+
+        <div class="footer">
+            <p>📄 Climate Disease Predictor — Project Report | February 2026</p>
+            <p>ClimateHealth Intelligence Platform — AI-Powered Disease Prediction System</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

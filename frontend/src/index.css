@@ -1,0 +1,555 @@
+/* ============================================================
+   CLIMATE HEALTH INTELLIGENCE PLATFORM — Premium Design System
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* ── Core Palette ── */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary: #06b6d4;
+  --secondary-light: #22d3ee;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  /* ── Backgrounds ── */
+  --bg-primary: #030712;
+  --bg-secondary: #0a0f1e;
+  --bg-card: rgba(15, 23, 42, 0.65);
+  --bg-elevated: rgba(30, 41, 59, 0.5);
+
+  /* ── Glass ── */
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-hover: rgba(255, 255, 255, 0.08);
+
+  /* ── Text ── */
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* ── Gradients ── */
+  --gradient-primary: linear-gradient(135deg, #6366f1, #06b6d4);
+  --gradient-warm: linear-gradient(135deg, #f97316, #ef4444);
+  --gradient-cool: linear-gradient(135deg, #06b6d4, #10b981);
+  --gradient-royal: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --gradient-gold: linear-gradient(135deg, #f59e0b, #ef4444);
+  --gradient-aurora: linear-gradient(135deg, #6366f1 0%, #06b6d4 35%, #10b981 65%, #f59e0b 100%);
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --shadow-glow-cyan: 0 0 40px rgba(6, 182, 212, 0.15);
+
+  /* ── Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+/* ============================================================
+   GLOBAL RESET & BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* ============================================================
+   ANIMATED BACKGROUND MESH
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 40%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 70% 60%, rgba(236, 72, 153, 0.06) 0%, transparent 60%);
+  z-index: -2;
+  animation: meshShift 20s ease-in-out infinite alternate;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: -1;
+}
+
+@keyframes meshShift {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  100% {
+    transform: scale(1.05) translate(-20px, -15px);
+  }
+}
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ============================================================
+   CARD — Premium Glassmorphism
+   ============================================================ */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-aurora);
+  opacity: 0.5;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+/* Glass Panel (used by components) */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   BUTTONS — Vibrant Gradient System
+   ============================================================ */
+.btn {
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* ============================================================
+   FORM INPUTS — Sleek Dark Inputs
+   ============================================================ */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  margin-top: 0.4rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), 0 0 20px rgba(99, 102, 241, 0.08);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+input::placeholder {
+  color: var(--text-dim);
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   NAVBAR — Premium Floating Navigation
+   ============================================================ */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  border-bottom: none;
+  position: relative;
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), rgba(6, 182, 212, 0.3), transparent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary-light);
+  background: rgba(99, 102, 241, 0.08);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  color: var(--primary-light);
+  background: rgba(99, 102, 241, 0.12);
+  font-weight: 600;
+}
+
+/* ============================================================
+   TYPOGRAPHY — Gradient Headings
+   ============================================================ */
+.title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  background: var(--gradient-aurora);
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 8s ease infinite;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+h2 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   GRID LAYOUT
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   SCROLLBAR — Minimal Sleek
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #fff;
+}
+
+/* ============================================================
+   FLOATING PARTICLES ANIMATION (pure CSS)
+   ============================================================ */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateY(-25px) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
